@@ -16,9 +16,7 @@ const gitPass = process.env.PASS;
 const gitRepo = process.env.REPO;
 const gitHubUrl = `https://${gitUser}:${gitPass}@github.com/${gitUser}/${gitRepo}`;
 
-console.log(gitHubUrl);
 simpleGit.clone(gitHubUrl);
-
 
 // Created instance of TelegramBot
 const bot = new TelegramBot(token, {
