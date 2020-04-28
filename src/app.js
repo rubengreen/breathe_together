@@ -16,12 +16,6 @@ const gitPass = process.env.PASS;
 const gitRepo = process.env.REPO;
 const gitHubUrl = `https://${gitUser}:${gitPass}@github.com/${gitUser}/${gitRepo}`;
 
-// add local git config like username and email
-simpleGit.addConfig('user.email','13jibber@gmail.com');
-simpleGit.addConfig('user.name','Breathe Together');
-// Add remore repo url as origin to repo
-simpleGitPromise.addRemote('origin',gitHubUrl);
-
 // Created instance of TelegramBot
 const bot = new TelegramBot(token, {
     polling: true
@@ -34,6 +28,11 @@ let tempSiteURL = '';
 
 //function to push to the github pages site: add content.html, commit with message, fetch origin
 function gitCommit () {
+  // add local git config like username and email
+  simpleGit.addConfig('user.email','13jibber@gmail.com');
+  simpleGit.addConfig('user.name','Breathe Together');
+  // Add remore repo url as origin to repo
+  simpleGitPromise.addRemote('origin',gitHubUrl);
   // Add all files for commit
     simpleGitPromise.add('.')
       .then(
