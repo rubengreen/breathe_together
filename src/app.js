@@ -5,8 +5,7 @@ var schedule = require('node-schedule');
 const TelegramBot = require('node-telegram-bot-api');
 // Simple-git without promise
 const simpleGit = require('simple-git')();
-// Shelljs package for running shell tasks optional
-//const shellJs = require('shelljs');
+
 // Simple Git with Promise for handling success and failure
 const simpleGitPromise = require('simple-git/promise')();
 const fs = require('fs');
@@ -70,14 +69,15 @@ var addDate = schedule.scheduleJob('0 0 * * *',function(){
   var para = "\n<p class=date>" + date + "</p>";
   fs.appendFile('content.html', para, (err) => {
       if (err) throw err;
-      console.log('The page was updated!');
+      console.log('Daily Date Added');
   });
 });
 
 //every hour, check if anything's changed; then push to git if it has
 var hasChanged = false;
 
-var hourlyCheck = schedule.scheduleJob('* 0 * * *',function(){
+var hourlyCheck = schedule.scheduleJob('* 58 * * *',function(){
+  console.log('Hourly Check Started');
   if (hasChanged) {
     gitCommit();
   }
@@ -90,7 +90,7 @@ function updatePage (user, message) {
   var para = "\n<p>" + message + "<br/><span class=timestamp>" + user + " - " + time + "</span></p>";
   fs.appendFile('content.html', para, (err) => {
       if (err) throw err;
-      console.log('The page was updated!');
+      console.log('Post added to content.html');
   });
   hasChanged = true;
 }
