@@ -28,7 +28,7 @@ const URLLabels = [];
 let tempSiteURL = '';
 
 //function to push to the github pages site: add content.html, commit with message, fetch origin
-function gitCommit {
+function gitCommit () {
   // Add all files for commit
     simpleGitPromise.add('.')
       .then(
