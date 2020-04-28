@@ -1,5 +1,6 @@
 require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
+const simpleGit = require('simple-git');
 
 const token = process.env.TOKEN;
 
@@ -20,10 +21,11 @@ function updatePage (user, message) {
   let date_ob = new Date();
   var time = ("0" + (date_ob.getHours())).slice(-2) + ":" + ("0" + (date_ob.getMinutes())).slice(-2);
   var para = "\n<p>" + message + "<br/><span class=timestamp>" + user + " - " + time + "</span></p>"
-  fs.appendFile(__dirname + '/public_html/content.html', para, (err) => {
+  fs.appendFile(__dirname + '../content.html', para, (err) => {
       if (err) throw err;
       console.log('The page was updated!');
   });
+  simpleGit
 }
 
 //add a text message
@@ -37,7 +39,7 @@ bot.on('photo', (msg) => {
   let date_ob = new Date();
   let username = msg.from.first_name;
   let newFilename = ("0" + date_ob.getDate()).slice(-2) + ("0" + (date_ob.getMonth() + 1)).slice(-2) + date_ob.getFullYear() + "-" + ("0" + (date_ob.getHours())).slice(-2) + ("0" + (date_ob.getMinutes())).slice(-2) + ("0" + (date_ob.getSeconds())).slice(-2) + "_" + username; //create new file name to change downloaded file to
-  let newPath =  __dirname + "/public_html/media/img/" + newFilename + ".jpg";
+  let newPath =  __dirname + "../media/img/" + newFilename + ".jpg";
   let imgCode = '<img src="media/img/' + newFilename + '.jpg"/>';
 
   function whenDownloaded(filePath) {  //function to run when image sucessfully downloaded - filePath is the path to the file
@@ -54,7 +56,7 @@ bot.on('photo', (msg) => {
   let pSize = msg.photo;
   let photoId = pSize[pSize.length - 1].file_id; //get id of largest photo size
 
-  const dlPromise = bot.downloadFile(photoId, __dirname + '/public_html/media/img'); //save photo and create Promise dlPromise
+  const dlPromise = bot.downloadFile(photoId, __dirname + '../media/img'); //save photo and create Promise dlPromise
   dlPromise.then(whenDownloaded)
 });
 
@@ -63,7 +65,7 @@ bot.on('voice', (msg) => {
   let date_ob = new Date();
   let username = msg.from.first_name;
   let newFilename = ("0" + date_ob.getDate()).slice(-2) + ("0" + (date_ob.getMonth() + 1)).slice(-2) + date_ob.getFullYear() + "-" + ("0" + (date_ob.getHours())).slice(-2) + ("0" + (date_ob.getMinutes())).slice(-2) + ("0" + (date_ob.getSeconds())).slice(-2) + "_" + username; //create new file name to change downloaded file to
-  let newPath =  __dirname + "/public_html/media/sound/" + newFilename + ".ogg";
+  let newPath =  __dirname + "../media/sound/" + newFilename + ".ogg";
   let soundCode = '<audio controls><source src="media/sound/' + newFilename + '.ogg" type="audio/ogg"></audio>';
 
   function whenDownloaded(filePath) {  //function to run when sucessfully downloaded - filePath is the path to the file
@@ -79,7 +81,7 @@ bot.on('voice', (msg) => {
 
   let soundId = msg.voice.file_id; //get id of sound file
 
-  const dlPromise = bot.downloadFile(soundId, __dirname + '/public_html/media/sound'); //save photo and create Promise dlPromise
+  const dlPromise = bot.downloadFile(soundId, __dirname + '../media/sound'); //save photo and create Promise dlPromise
   dlPromise.then(whenDownloaded)
 });
 
@@ -88,7 +90,7 @@ bot.on('audio', (msg) => {
   let date_ob = new Date();
   let username = msg.from.first_name;
   let newFilename = ("0" + date_ob.getDate()).slice(-2) + ("0" + (date_ob.getMonth() + 1)).slice(-2) + date_ob.getFullYear() + "-" + ("0" + (date_ob.getHours())).slice(-2) + ("0" + (date_ob.getMinutes())).slice(-2) + ("0" + (date_ob.getSeconds())).slice(-2) + "_" + username; //create new file name to change downloaded file to
-  let newPath =  __dirname + "/public_html/media/sound/" + newFilename + ".ogg";
+  let newPath =  __dirname + "../media/sound/" + newFilename + ".ogg";
   let soundCode = '<audio controls><source src="media/sound/' + newFilename + '.ogg" type="audio/ogg"></audio>';
 
   function whenDownloaded(filePath) {  //function to run when sucessfully downloaded - filePath is the path to the file
@@ -104,7 +106,7 @@ bot.on('audio', (msg) => {
 
   let soundId = msg.audio.file_id; //get id of sound file
 
-  const dlPromise = bot.downloadFile(soundId, __dirname + '/public_html/media/sound'); //save photo and create Promise dlPromise
+  const dlPromise = bot.downloadFile(soundId, __dirname + '../media/sound'); //save photo and create Promise dlPromise
   dlPromise.then(whenDownloaded)
 });
 
@@ -113,7 +115,7 @@ bot.on('video_note', (msg) => {
   let date_ob = new Date();
   let username = msg.from.first_name;
   let newFilename = ("0" + date_ob.getDate()).slice(-2) + ("0" + (date_ob.getMonth() + 1)).slice(-2) + date_ob.getFullYear() + "-" + ("0" + (date_ob.getHours())).slice(-2) + ("0" + (date_ob.getMinutes())).slice(-2) + ("0" + (date_ob.getSeconds())).slice(-2) + "_" + username; //create new file name to change downloaded file to
-  let newPath =  __dirname + "/public_html/media/video/" + newFilename + ".mp4";
+  let newPath =  __dirname + "../media/video/" + newFilename + ".mp4";
   let videoCode = '<video width=20em" height="35.55em" controls><source src="media/video/' + newFilename + '.mp4" type="video/mp4"></video>';
 
   function whenDownloaded(filePath) {  //function to run when sucessfully downloaded - filePath is the path to the file
@@ -129,7 +131,7 @@ bot.on('video_note', (msg) => {
 
   let videoId = msg.video_note.file_id; //get id of sound file
 
-  const dlPromise = bot.downloadFile(videoId, __dirname + '/public_html/media/sound'); //save photo and create Promise dlPromise
+  const dlPromise = bot.downloadFile(videoId, __dirname + '../media/sound'); //save photo and create Promise dlPromise
   dlPromise.then(whenDownloaded)
 });
 
@@ -138,7 +140,7 @@ bot.on('video', (msg) => {
   let date_ob = new Date();
   let username = msg.from.first_name;
   let newFilename = ("0" + date_ob.getDate()).slice(-2) + ("0" + (date_ob.getMonth() + 1)).slice(-2) + date_ob.getFullYear() + "-" + ("0" + (date_ob.getHours())).slice(-2) + ("0" + (date_ob.getMinutes())).slice(-2) + ("0" + (date_ob.getSeconds())).slice(-2) + "_" + username; //create new file name to change downloaded file to
-  let newPath =  __dirname + "/public_html/media/video/" + newFilename + ".mp4";
+  let newPath =  __dirname + "../media/video/" + newFilename + ".mp4";
   let videoCode = '<video width=20em" height="35.55em" controls><source src="media/video/' + newFilename + '.mp4" type="video/mp4"></video>';
 
   function whenDownloaded(filePath) {  //function to run when sucessfully downloaded - filePath is the path to the file
@@ -154,7 +156,7 @@ bot.on('video', (msg) => {
 
   let videoId = msg.video.file_id; //get id of sound file
 
-  const dlPromise = bot.downloadFile(videoId, __dirname + '/public_html/media/sound'); //save photo and create Promise dlPromise
+  const dlPromise = bot.downloadFile(videoId, __dirname + '../media/sound'); //save photo and create Promise dlPromise
   dlPromise.then(whenDownloaded)
 });
 
