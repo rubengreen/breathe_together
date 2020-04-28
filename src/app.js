@@ -1,7 +1,12 @@
 require('dotenv').config();
 
 const TelegramBot = require('node-telegram-bot-api');
-const simpleGit = require('simple-git');
+// Simple-git without promise
+const simpleGit = require('simple-git')();
+// Shelljs package for running shell tasks optional
+const shellJs = require('shelljs');
+// Simple Git with Promise for handling success and failure
+const simpleGitPromise = require('simple-git/promise')();
 const fs = require('fs');
 
 // .env contains bot token TOKEN, git username USER and password PASS, and repo url REPO:
