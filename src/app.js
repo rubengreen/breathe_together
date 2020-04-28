@@ -11,7 +11,7 @@ const fs = require('fs');
 
 // .env contains bot token TOKEN, git username USER and password PASS, and repo url REPO:
 const token = process.env.TOKEN;
-const gitUser = process.env.USER;
+const gitUser = process.env.USERNAME;
 const gitPass = process.env.PASS;
 const gitRepo = process.env.REPO;
 const gitHubUrl = `https://${gitUser}:${gitPass}@github.com/${gitUser}/${gitRepo}`;
