@@ -32,8 +32,8 @@ function gitCommit () {
   simpleGit.addConfig('user.email','13jibber@gmail.com');
   simpleGit.addConfig('user.name','Breathe Together');
 
-  // Add remore repo url as origin to repo <<poss unneccesary??>>
-//  simpleGitPromise.addRemote('origin',gitHubUrl);
+  // clone to embed user/pass
+  simpleGitPromise.clone(gitHubUrl);
 
   // Add all files for commit
     simpleGitPromise.add('content.html')
