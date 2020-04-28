@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+var schedule = require('node-schedule');
+
 const TelegramBot = require('node-telegram-bot-api');
 // Simple-git without promise
 const simpleGit = require('simple-git')();
@@ -61,16 +63,36 @@ function gitCommit () {
    });
 }
 
-//function to add a message to the webpage
-function updatePage (user, message) {
+//add date every night at midnight
+var addDate = schedule.scheduleJob('0 0 * * *',function(){
   let date_ob = new Date();
-  var time = ("0" + (date_ob.getHours())).slice(-2) + ":" + ("0" + (date_ob.getMinutes())).slice(-2);
-  var para = "\n<p>" + message + "<br/><span class=timestamp>" + user + " - " + time + "</span></p>"
+  var date = ("0" + (date_ob.getDate())).slice(-2) + ":" + ("0" + (date_ob.getMinutes())).slice(-2);
+  var para = "\n<p class=date>" + date + "</p>";
   fs.appendFile('content.html', para, (err) => {
       if (err) throw err;
       console.log('The page was updated!');
   });
-  gitCommit();
+});
+
+//every hour, check if anything's changed; then push to git if it has
+var hasChanged = false;
+
+var hourlyCheck = schedule.scheduleJob('* 0 * * *',function(){
+  if (hasChanged) {
+    gitCommit();
+  }
+});
+
+//function to add a message to the webpage
+function updatePage (user, message) {
+  let date_ob = new Date();
+  var time = ("0" + (date_ob.getHours())).slice(-2) + ":" + ("0" + (date_ob.getMinutes())).slice(-2);
+  var para = "\n<p>" + message + "<br/><span class=timestamp>" + user + " - " + time + "</span></p>";
+  fs.appendFile('content.html', para, (err) => {
+      if (err) throw err;
+      console.log('The page was updated!');
+  });
+  hasChanged = true;
 }
 
 //add a text message
@@ -161,7 +183,7 @@ bot.on('video_note', (msg) => {
   let username = msg.from.first_name;
   let newFilename = ("0" + date_ob.getDate()).slice(-2) + ("0" + (date_ob.getMonth() + 1)).slice(-2) + date_ob.getFullYear() + "-" + ("0" + (date_ob.getHours())).slice(-2) + ("0" + (date_ob.getMinutes())).slice(-2) + ("0" + (date_ob.getSeconds())).slice(-2) + "_" + username; //create new file name to change downloaded file to
   let newPath =  "media/video/" + newFilename + ".mp4";
-  let videoCode = '<video width=20em" height="35.55em" controls><source src="media/video/' + newFilename + '.mp4" type="video/mp4"></video>';
+  let videoCode = '<video width="400px" height="400px" controls><source src="media/video/' + newFilename + '.mp4" type="video/mp4"></video>';
 
   function whenDownloaded(filePath) {  //function to run when sucessfully downloaded - filePath is the path to the file
     fs.rename(filePath, newPath, function(err) { //rename sound file
@@ -186,7 +208,7 @@ bot.on('video', (msg) => {
   let username = msg.from.first_name;
   let newFilename = ("0" + date_ob.getDate()).slice(-2) + ("0" + (date_ob.getMonth() + 1)).slice(-2) + date_ob.getFullYear() + "-" + ("0" + (date_ob.getHours())).slice(-2) + ("0" + (date_ob.getMinutes())).slice(-2) + ("0" + (date_ob.getSeconds())).slice(-2) + "_" + username; //create new file name to change downloaded file to
   let newPath =  "media/video/" + newFilename + ".mp4";
-  let videoCode = '<video width=20em" height="35.55em" controls><source src="media/video/' + newFilename + '.mp4" type="video/mp4"></video>';
+  let videoCode = '<video width="400px" height="400px" controls><source src="media/video/' + newFilename + '.mp4" type="video/mp4"></video>';
 
   function whenDownloaded(filePath) {  //function to run when sucessfully downloaded - filePath is the path to the file
     fs.rename(filePath, newPath, function(err) { //rename sound file
