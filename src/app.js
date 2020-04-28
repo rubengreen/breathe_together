@@ -16,6 +16,9 @@ const gitPass = process.env.PASS;
 const gitRepo = process.env.REPO;
 const gitHubUrl = `https://${gitUser}:${gitPass}@github.com/${gitUser}/${gitRepo}`;
 
+simpleGitPromise.clone(gitHubUrl);
+console.log(gitHubUrl);
+
 // Created instance of TelegramBot
 const bot = new TelegramBot(token, {
     polling: true
@@ -33,8 +36,6 @@ function gitCommit () {
   simpleGit.addConfig('user.name','Breathe Together');
 
   // clone to embed user/pass
-  simpleGitPromise.clone(gitHubUrl);
-  console.log(gitHubUrl);
 
   // Add all files for commit
     simpleGitPromise.add('content.html')
