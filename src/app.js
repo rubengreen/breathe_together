@@ -1,8 +1,21 @@
 require('dotenv').config();
+
 const TelegramBot = require('node-telegram-bot-api');
 const simpleGit = require('simple-git');
+const fs = require('fs');
 
+// .env contains bot token TOKEN, git username USER and password PASS, and repo url REPO:
 const token = process.env.TOKEN;
+const gitUser = process.env.USER;
+const gitPass = process.env.PASS;
+const gitRepo = process.env.REPO;
+const gitHubUrl = `https://${gitUser}:${gitPass}@github.com/${gitUser}/${gitRepo}`;
+
+// add local git config like username and email
+simpleGit.addConfig('user.email','13jibber@gmail.com');
+simpleGit.addConfig('user.name','Breathe Together');
+// Add remore repo url as origin to repo
+simpleGitPromise.addRemote('origin',gitHubUrl);
 
 // Created instance of TelegramBot
 const bot = new TelegramBot(token, {
@@ -14,9 +27,34 @@ const URLs = [];
 const URLLabels = [];
 let tempSiteURL = '';
 
-//function to add a message to the webpage
-const fs = require('fs');
+//function to push to the github pages site: add content.html, commit with message, fetch origin
+function gitCommit {
+  // Add all files for commit
+    simpleGitPromise.add('.')
+      .then(
+         (addSuccess) => {
+            console.log(addSuccess);
+         }, (failedAdd) => {
+            console.log('adding files failed');
+      });
+  // Commit files as Initial Commit
+   simpleGitPromise.commit('Intial commit by simplegit')
+     .then(
+        (successCommit) => {
+          console.log(successCommit);
+       }, (failed) => {
+          console.log('failed commmit');
+   });
+  // Finally push to online repository
+   simpleGitPromise.push('origin','master')
+      .then((success) => {
+         console.log('repo successfully pushed');
+      },(failed)=> {
+         console.log('repo push failed');
+   });
+}
 
+//function to add a message to the webpage
 function updatePage (user, message) {
   let date_ob = new Date();
   var time = ("0" + (date_ob.getHours())).slice(-2) + ":" + ("0" + (date_ob.getMinutes())).slice(-2);
@@ -25,7 +63,7 @@ function updatePage (user, message) {
       if (err) throw err;
       console.log('The page was updated!');
   });
-  simpleGit
+  gitCommit();
 }
 
 //add a text message
