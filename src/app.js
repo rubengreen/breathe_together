@@ -31,10 +31,12 @@ function gitCommit () {
   // add local git config like username and email
   simpleGit.addConfig('user.email','13jibber@gmail.com');
   simpleGit.addConfig('user.name','Breathe Together');
-  // Add remore repo url as origin to repo
-  simpleGitPromise.addRemote('origin',gitHubUrl);
+
+  // Add remore repo url as origin to repo <<poss unneccesary??>>
+//  simpleGitPromise.addRemote('origin',gitHubUrl);
+
   // Add all files for commit
-    simpleGitPromise.add('.')
+    simpleGitPromise.add('content.html')
       .then(
          (addSuccess) => {
             console.log(addSuccess);
