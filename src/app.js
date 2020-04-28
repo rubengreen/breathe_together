@@ -1,5 +1,8 @@
 require('dotenv').config();
 
+// add timestamps in front of log messages
+require('console-stamp')(console, '[HH:MM:ss.l]');
+
 var schedule = require('node-schedule');
 
 const TelegramBot = require('node-telegram-bot-api');
@@ -76,10 +79,15 @@ var addDate = schedule.scheduleJob('0 0 * * *',function(){
 //every hour, check if anything's changed; then push to git if it has
 var hasChanged = false;
 
-var hourlyCheck = schedule.scheduleJob('* 58 * * *',function(){
+var hourlyCheck = schedule.scheduleJob('55 * * * *',function(){
   console.log('Hourly Check Started');
   if (hasChanged) {
+  console.log('Changes found - commiting');
+
     gitCommit();
+  } else {
+  console.log('no changes');
+
   }
 });
 
