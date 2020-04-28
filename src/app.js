@@ -34,6 +34,7 @@ function gitCommit () {
 
   // clone to embed user/pass
   simpleGitPromise.clone(gitHubUrl);
+  console.log(gitHubUrl);
 
   // Add all files for commit
     simpleGitPromise.add('content.html')
