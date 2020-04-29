@@ -97,7 +97,7 @@ var hourlyCheck = schedule.scheduleJob('55 * * * *',function(){
   if (hasChanged) {
   console.log('Changes found - commiting');
     gitCommit();
-    var hasChanged = false
+    hasChanged = false
   } else {
   console.log('no changes');
 
@@ -113,7 +113,7 @@ function updatePage (user, message) {
       if (err) throw err;
       console.log('Post added to content.html');
   });
-  var hasChanged = true;
+  hasChanged = true;
 }
 
 //add a text message
