@@ -68,12 +68,25 @@ function gitCommit () {
 //add date every night at midnight
 var addDate = schedule.scheduleJob('0 0 * * *',function(){
   let date_ob = new Date();
-  var date = ("0" + (date_ob.getDate())).slice(-2) + ":" + ("0" + (date_ob.getMinutes())).slice(-2);
+  var date = ("0" + (date_ob.getDate())).slice(-2) + "/" + ("0" + (date_ob.getMonth())).slice(-2);
   var para = "\n<p class=date>" + date + "</p>";
   fs.appendFile('content.html', para, (err) => {
       if (err) throw err;
       console.log('Daily Date Added');
   });
+});
+
+//press g to push to git now
+const readline = require('readline');
+readline.emitKeypressEvents(process.stdin);
+process.stdin.setRawMode(true);
+process.stdin.on('keypress', (str, key) => {
+  if (key.ctrl && key.name === 'c') {
+    process.exit();
+  } else if (key.name === 'g') {
+    console.log('force git push')
+    gitCommit();
+  }
 });
 
 //every hour, check if anything's changed; then push to git if it has
@@ -83,8 +96,8 @@ var hourlyCheck = schedule.scheduleJob('55 * * * *',function(){
   console.log('Hourly Check Started');
   if (hasChanged) {
   console.log('Changes found - commiting');
-
     gitCommit();
+    var hasChanged = false
   } else {
   console.log('no changes');
 
@@ -100,7 +113,7 @@ function updatePage (user, message) {
       if (err) throw err;
       console.log('Post added to content.html');
   });
-  hasChanged = true;
+  var hasChanged = true;
 }
 
 //add a text message
@@ -191,7 +204,7 @@ bot.on('video_note', (msg) => {
   let username = msg.from.first_name;
   let newFilename = ("0" + date_ob.getDate()).slice(-2) + ("0" + (date_ob.getMonth() + 1)).slice(-2) + date_ob.getFullYear() + "-" + ("0" + (date_ob.getHours())).slice(-2) + ("0" + (date_ob.getMinutes())).slice(-2) + ("0" + (date_ob.getSeconds())).slice(-2) + "_" + username; //create new file name to change downloaded file to
   let newPath =  "media/video/" + newFilename + ".mp4";
-  let videoCode = '<video width="400px" height="400px" controls><source src="media/video/' + newFilename + '.mp4" type="video/mp4"></video>';
+  let videoCode = '<video class="videonote" width="300px" height="300px"><source src="media/video/' + newFilename + '.mp4" type="video/mp4"></video>';
 
   function whenDownloaded(filePath) {  //function to run when sucessfully downloaded - filePath is the path to the file
     fs.rename(filePath, newPath, function(err) { //rename sound file
@@ -216,7 +229,7 @@ bot.on('video', (msg) => {
   let username = msg.from.first_name;
   let newFilename = ("0" + date_ob.getDate()).slice(-2) + ("0" + (date_ob.getMonth() + 1)).slice(-2) + date_ob.getFullYear() + "-" + ("0" + (date_ob.getHours())).slice(-2) + ("0" + (date_ob.getMinutes())).slice(-2) + ("0" + (date_ob.getSeconds())).slice(-2) + "_" + username; //create new file name to change downloaded file to
   let newPath =  "media/video/" + newFilename + ".mp4";
-  let videoCode = '<video width="400px" height="400px" controls><source src="media/video/' + newFilename + '.mp4" type="video/mp4"></video>';
+  let videoCode = '<video width="400px" height="400px"><source src="media/video/' + newFilename + '.mp4" type="video/mp4"></video>';
 
   function whenDownloaded(filePath) {  //function to run when sucessfully downloaded - filePath is the path to the file
     fs.rename(filePath, newPath, function(err) { //rename sound file
